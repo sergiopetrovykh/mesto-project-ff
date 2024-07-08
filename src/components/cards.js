@@ -1,3 +1,5 @@
+//в файле cards.js описан массив карточек, отображаемых на странице;
+
 const initialCards = [
     {
       name: "Усьвинские столбы",
@@ -24,3 +26,5 @@ const initialCards = [
       link: "https://klau.club/uploads/posts/2023-02/1677500703_klau-club-p-rasteniya-i-zhivotnie-reki-vishera-vkontak-15.jpg",
     }
 ];
+
+export { initialCards };

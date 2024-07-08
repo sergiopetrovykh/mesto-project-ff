@@ -1,0 +1,27 @@
+@import url('../vendor/normalize.css');
+@import url('../vendor/fonts.css');
+@import url('../blocks/page/page.css');
+@import url('../blocks/header/header.css');
+@import url('../blocks/content/content.css');
+@import url('../blocks/footer/footer.css');
+@import url('../blocks/profile/profile.css');
+@import url('../blocks/places/places.css');
+@import url('../blocks/card/card.css');
+@import url('../blocks/popup/popup.css');
+@import url('../blocks/popup/_is-animated/popup_is-animated.css');
+@import url('../blocks/popup/_is-opened/popup_is-opened.css');
+
+/* 
+normalize.css: Импортирует Normalize.css, библиотеку, которая нормализует стили браузеров для обеспечения большей кросс-браузерной совместимости.
+fonts.css: Импортирует файл с настройками шрифтов. Этот файл, вероятно, содержит правила CSS для различных шрифтов, используемых на сайте.
+page.css: Импортирует стили для общего оформления страницы.
+header.css: Импортирует стили для шапки страницы.
+content.css: Импортирует стили для основного содержимого страницы.
+footer.css: Импортирует стили для нижнего колонтитула страницы.
+profile.css: Импортирует стили для профиля пользователя.
+places.css: Импортирует стили для блока с карточками (places).
+card.css: Импортирует стили для карточек.
+popup.css: Импортирует стили для попапов.
+_is-animated/popup_is-animated.css: Импортирует стили для анимации попапов (плавное появление и исчезание).
+_is-opened/popup_is-opened.css: Импортирует стили для открытых попапов.
+*/
