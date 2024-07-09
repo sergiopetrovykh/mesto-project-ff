@@ -1,5 +1,5 @@
 //в файле modal.js описаны функции для работы с модальными окнами: функция открытия модального окна, функция закрытия модального окна, функция-обработчик события нажатия Esc и функция-обработчик события клика по оверлею;
-//файл modal.js. Экспортируйем функции openModal и closeModal, принимающие в качестве аргумента DOM-элемент модального окна, с которым нужно произвести действие.
+//файл modal.js. Экспортируем функции openModal и closeModal, принимающие в качестве аргумента DOM-элемент модального окна, с которым нужно произвести действие.
 
 // Объявление функций
 
@@ -37,6 +37,7 @@ function closeModal(modal) {
   if (modal && modal.classList.contains('popup_is-opened')) {
     modal.classList.remove('popup_is-opened');
     document.removeEventListener('keydown', closeModalOnEsc);
+    modal.removeEventListener('click', handleOverlayClick);
 
     // Ждать завершения анимации перед удалением класса popup_is-animated
     modal.addEventListener('transitionend', () => {
@@ -66,16 +67,6 @@ function closeModalOnEsc(evt) {
 // Аргументы: evt - объект события.
 // Проверка: Проверяется, что нажатая клавиша - Escape.
 // Действие: Если проверка пройдена, ищется элемент с классом popup_is-opened. Если такой элемент найден, вызывается функция closeModal для его закрытия.
-
-
-// Закрытие модального окна при нажатии в пустом месте по оверлею
-function closeModalOnOverlay(evt) {
-  if (evt.target.classList.contains('popup_is-opened')) {
-    closeModal(evt.target);
-  }
-}
-// Проверяет, является ли цель клика (evt.target) оверлей (то есть сам модальный контейнер, а не его содержимое).
-// Если клик был по оверлею, вызывает closeModal для закрытия модального окна.
 
 
 // Экспорт функций, чтобы их можно было использовать в других модулях.

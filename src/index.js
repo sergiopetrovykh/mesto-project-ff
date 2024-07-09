@@ -39,9 +39,9 @@ const cardLinkInput = addCardPopup.querySelector(".popup__input_type_url");
 function createCardElement(cardData) {
   return createCard(
     cardData,
-    handleImageClick,
-    handleLikeClick,
-    handleDeleteClick
+    // handleImageClick,
+    // handleLikeClick,
+    // handleDeleteClick
   );
 }
 
@@ -60,9 +60,9 @@ function handleProfileEdit() {
 }
 
 // Обработчик закрытия попапа
-function handleCloseButton(popup) {
+/* function handleCloseButton(popup) {
   closeModal(popup);
-}
+} */
 
 // Обработка формы редактирования профиля
 function handleProfileFormSubmit(evt) {
@@ -73,24 +73,24 @@ function handleProfileFormSubmit(evt) {
 }
 
 // Обработчик клика по изображению карточки
-function handleImageClick(data) {
+/* function handleImageClick(data) {
   const popupImage = viewImagePopup.querySelector(".popup__image");
   const popupCaption = viewImagePopup.querySelector(".popup__caption");
   popupImage.src = data.link;
   popupImage.alt = data.name;
   popupCaption.textContent = data.name;
   openModal(viewImagePopup);
-}
+} */
 
 // Обработчик лайка карточки
-function handleLikeClick(evt) {
+/* function handleLikeClick(evt) {
   evt.target.classList.toggle("card__like-button_active");
 }
 
 // Обработчик удаления карточки
 function handleDeleteClick(evt) {
   evt.target.closest(".card").remove();
-}
+} */
 
 // Обработка формы добавления карточки
 function handleAddCardFormSubmit(evt) {
