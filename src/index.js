@@ -59,11 +59,6 @@ function handleProfileEdit() {
   openModal(profilePopup);
 }
 
-// Обработчик закрытия попапа
-/* function handleCloseButton(popup) {
-  closeModal(popup);
-} */
-
 // Обработка формы редактирования профиля
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
@@ -71,26 +66,6 @@ function handleProfileFormSubmit(evt) {
   profileDescription.textContent = jobInput.value;
   closeModal(profilePopup);
 }
-
-// Обработчик клика по изображению карточки
-/* function handleImageClick(data) {
-  const popupImage = viewImagePopup.querySelector(".popup__image");
-  const popupCaption = viewImagePopup.querySelector(".popup__caption");
-  popupImage.src = data.link;
-  popupImage.alt = data.name;
-  popupCaption.textContent = data.name;
-  openModal(viewImagePopup);
-} */
-
-// Обработчик лайка карточки
-/* function handleLikeClick(evt) {
-  evt.target.classList.toggle("card__like-button_active");
-}
-
-// Обработчик удаления карточки
-function handleDeleteClick(evt) {
-  evt.target.closest(".card").remove();
-} */
 
 // Обработка формы добавления карточки
 function handleAddCardFormSubmit(evt) {
@@ -112,7 +87,7 @@ profileEditButton.addEventListener("click", handleProfileEdit);
 
 // Закрытие попапа редактирования профиля
 profileCloseButton.addEventListener("click", () =>
-  handleCloseButton(profilePopup)
+  closeModal(profilePopup)
 );
 
 // Обработка формы редактирования профиля
@@ -123,7 +98,7 @@ addCardButton.addEventListener("click", () => openModal(addCardPopup));
 
 // Закрытие попапа добавления карточки
 addCardCloseButton.addEventListener("click", () =>
-  handleCloseButton(addCardPopup)
+  closeModal(addCardPopup)
 );
 
 // Добавление обработчика формы добавления карточки
