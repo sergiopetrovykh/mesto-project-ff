@@ -10,7 +10,11 @@ import "./pages/index.css";
 
 // Импорт данных и функций для работы с карточками и модальными окнами
 import { initialCards } from "./components/cards.js";
-import { createCard } from "./components/card.js";
+import {
+  createCard,
+  handleLikeClick,
+  handleDeleteClick,
+} from "./components/card.js";
 import { openModal, closeModal } from "./components/modal.js";
 
 // Объявления и инициализация глобальных переменных с DOM-элементами страницы
@@ -35,13 +39,25 @@ const cardNameInput = addCardPopup.querySelector(
 );
 const cardLinkInput = addCardPopup.querySelector(".popup__input_type_url");
 
+// Обработчик клика по изображению карточки
+function handleImageClick(data) {
+  const popupImage = viewImagePopup.querySelector(".popup__image");
+  const popupCaption = viewImagePopup.querySelector(".popup__caption");
+
+  popupImage.src = data.link;
+  popupImage.alt = data.name;
+  popupCaption.textContent = data.name;
+
+  openModal(viewImagePopup);
+}
+
 // Создание карточки
 function createCardElement(cardData) {
   return createCard(
     cardData,
-    // handleImageClick,
-    // handleLikeClick,
-    // handleDeleteClick
+    handleImageClick,
+    handleLikeClick,
+    handleDeleteClick
   );
 }
 
@@ -86,9 +102,7 @@ renderCards(initialCards);
 profileEditButton.addEventListener("click", handleProfileEdit);
 
 // Закрытие попапа редактирования профиля
-profileCloseButton.addEventListener("click", () =>
-  closeModal(profilePopup)
-);
+profileCloseButton.addEventListener("click", () => closeModal(profilePopup));
 
 // Обработка формы редактирования профиля
 profileForm.addEventListener("submit", handleProfileFormSubmit);
@@ -97,9 +111,7 @@ profileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardButton.addEventListener("click", () => openModal(addCardPopup));
 
 // Закрытие попапа добавления карточки
-addCardCloseButton.addEventListener("click", () =>
-  closeModal(addCardPopup)
-);
+addCardCloseButton.addEventListener("click", () => closeModal(addCardPopup));
 
 // Добавление обработчика формы добавления карточки
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
