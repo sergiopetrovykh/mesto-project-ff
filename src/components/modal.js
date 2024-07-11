@@ -5,46 +5,51 @@
 
 // Обработчик клика по оверлею
 function handleOverlayClick(evt) {
-  if (evt.target.classList.contains('popup')) {
+  if (evt.target.classList.contains("popup")) {
     closeModal(evt.target);
   }
 }
 
-// Функция открытия модального окна (поп-ап)
+// Функция открытия модального окна (поп-ап). modal: элемент модального окна, который нужно открыть. Этот элемент должен иметь класс popup.
 function openModal(modal) {
-  if (modal && modal.classList.contains('popup')) {
+  // Проверка наличия элемента и класса. Функция сначала проверяет, существует ли переданный элемент modal и имеет ли он класс popup. Это предотвращает ошибочное открытие несуществующего или неправильного элемента
+  if (modal && modal.classList.contains("popup")) {
     // Добавляем класс для анимации
-    modal.classList.add('popup_is-animated');
+    modal.classList.add("popup_is-animated");
 
-    // Делаем небольшую задержку перед добавлением класса открытия, чтобы анимация сработала
+    // Делаем небольшую задержку в 10 миллисекунд перед добавлением класса открытия, чтобы анимация сработала
     setTimeout(() => {
-      modal.classList.add('popup_is-opened');
+      modal.classList.add("popup_is-opened");
     }, 10);
-
-    document.addEventListener('keydown', closeModalOnEsc);
-    modal.addEventListener('click', handleOverlayClick);
+    // Добавление обработчиков событий:
+    document.addEventListener(
+      "keydown",
+      closeModalOnEsc
+    ); /* Этот обработчик (closeModalOnEsc) будет закрывать модальное окно при нажатии клавиши Escape. */
+    modal.addEventListener(
+      "click",
+      handleOverlayClick
+    ); /* Этот обработчик (handleOverlayClick) будет закрывать модальное окно, если клик произошел по оверлею (фону за модальным окном). */
   }
 }
-// Аргументы: modal - DOM-элемент модального окна, которое нужно открыть.
-// Проверка: Сначала проверяется, что modal не равен null и содержит класс popup.
-// Действие: Если проверка пройдена, к элементу modal добавляется класс popup_is-opened, который, вероятно, отвечает за видимость модального окна.
-// Событие: Добавляется обработчик события нажатия клавиши Esc (Escape), который вызывает функцию closeModalOnEsc для закрытия модального окна при нажатии этой клавиши.
-// Обработчик событий click для самого модального окна, который вызывает closeModalOnOverlay.
-
 
 // Функция закрытия модального окна
 function closeModal(modal) {
-  if (modal && modal.classList.contains('popup_is-opened')) {
-    modal.classList.remove('popup_is-opened');
-    document.removeEventListener('keydown', closeModalOnEsc);
-    modal.removeEventListener('click', handleOverlayClick);
+  if (modal && modal.classList.contains("popup_is-opened")) {
+    modal.classList.remove("popup_is-opened");
+    document.removeEventListener("keydown", closeModalOnEsc);
+    modal.removeEventListener("click", handleOverlayClick);
 
     // Ждать завершения анимации перед удалением класса popup_is-animated
-    modal.addEventListener('transitionend', () => {
-      if (!modal.classList.contains('popup_is-opened')) {
-        modal.classList.remove('popup_is-animated');
-      }
-    }, { once: true });
+    modal.addEventListener(
+      "transitionend",
+      () => {
+        if (!modal.classList.contains("popup_is-opened")) {
+          modal.classList.remove("popup_is-animated");
+        }
+      },
+      { once: true }
+    );
   }
 }
 // Аргументы: modal - DOM-элемент модального окна, которое нужно закрыть.
@@ -52,11 +57,10 @@ function closeModal(modal) {
 // Действие: Если проверка пройдена, у элемента modal удаляется класс popup_is-opened, что скрывает модальное окно.
 // Событие: Удаляется обработчик события нажатия клавиши Esc, так как окно больше не активно.
 
-
 // Функция закрытия модального окна при нажатии на Esc
 function closeModalOnEsc(evt) {
-  if (evt.key === 'Escape') {
-    const openPopup = document.querySelector('.popup_is-opened');
+  if (evt.key === "Escape") {
+    const openPopup = document.querySelector(".popup_is-opened");
     if (openPopup) {
       closeModal(openPopup);
     }
@@ -67,7 +71,6 @@ function closeModalOnEsc(evt) {
 // Аргументы: evt - объект события.
 // Проверка: Проверяется, что нажатая клавиша - Escape.
 // Действие: Если проверка пройдена, ищется элемент с классом popup_is-opened. Если такой элемент найден, вызывается функция closeModal для его закрытия.
-
 
 // Экспорт функций, чтобы их можно было использовать в других модулях.
 export { openModal, closeModal };
