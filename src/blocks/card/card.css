@@ -5,6 +5,13 @@
 @import url('./__delete-button/card__delete-button.css');
 @import url('./__title/card__title.css');
 
+/* Добавляем импорты на 7 спринте: */
+@import url('./__like-counter/card__like-counter.css'); /*отображение счетчика лайков на карточке.*/
+@import url('./__like-counter/_is-active/card__like-counter_is-active.css'); /*счетчик лайков активен*/
+@import url('./__like-block/card__like-block.css'); /* кнопки лайков*/
+@import url('./__delete-button/_is-active/card__delete-button_is-active.css'); /*активная кнопка удаления*/
+
+
 .card {
   font-family: 'Inter', Arial, sans-serif;
   -webkit-border-radius: 10px;
@@ -13,3 +20,4 @@
   position: relative;
   overflow: hidden;
 }
+
