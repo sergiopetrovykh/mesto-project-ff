@@ -1,5 +1,4 @@
-// Импортируем функции для работы с модальными окнами и API
-import { openModal, closeModal } from "./modal.js";
+// Импортируем функции для работы с API
 import { deleteCard, likeCard, unlikeCard } from "./api.js";
 
 // Обработчик клика по кнопке лайка
@@ -31,24 +30,6 @@ function handleLikeClick(evt) {
       })
       .catch((err) => console.log(err)); // Ловим ошибки
   }
-}
-
-// Обработчик клика по кнопке удаления карточки
-function handleDeleteClick(evt, cardId, cardElement) {
-  evt.preventDefault(); // Отменяем стандартное поведение по умолчанию
-  const confirmPopup = document.querySelector(".popup_type_confirm"); // Находим попап подтверждения удаления
-  const confirmButton = confirmPopup.querySelector(".popup__button_confirm"); // Кнопка подтверждения в попапе
-
-  openModal(confirmPopup); // Открываем попап
-
-  confirmButton.onclick = () => {
-    deleteCard(cardId) // Отправляем запрос на удаление карточки
-      .then(() => {
-        cardElement.remove(); // Удаляем элемент карточки из DOM
-        closeModal(confirmPopup); // Закрываем попап
-      })
-      .catch((err) => console.log(err)); // Ловим ошибки
-  };
 }
 
 // Функция для создания элемента карточки
@@ -117,4 +98,4 @@ function createCard(
   ); // Создаём карточку и возвращаем её
 }
 
-export { createCard, handleLikeClick, handleDeleteClick }; // Экспортируем функции для использования в других модулях
+export { createCard, handleLikeClick }; // Экспортируем функции для использования в других модулях

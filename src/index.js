@@ -1,10 +1,6 @@
 // Импортируем CSS стили и функции из других модулей
 import "./pages/index.css";
-import {
-  createCard,
-  handleLikeClick,
-  handleDeleteClick,
-} from "./components/card.js";
+import { createCard, handleLikeClick } from "./components/card.js";
 import { openModal, closeModal } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 import {
@@ -13,6 +9,7 @@ import {
   updateUserInfo,
   addNewCard,
   updateAvatar,
+  deleteCard,
 } from "./components/api.js";
 
 // Объявления и инициализация глобальных переменных с DOM-элементами страницы
@@ -47,13 +44,15 @@ const validationConfig = {
   errorClass: "popup__error_visible", // Класс для отображения ошибки
 };
 
+// Статичные элементы попапов
+const confirmPopup = document.querySelector(".popup_type_confirm"); // Попап подтверждения удаления
+const confirmButton = confirmPopup.querySelector(".popup__button_confirm"); // Кнопка подтверждения в попапе
+const popupImage = viewImagePopup.querySelector(".popup__image"); // Изображение в попапе
+const popupCaption = viewImagePopup.querySelector(".popup__caption"); // Подпись в попапе
+
 // Функция для отображения состояния загрузки
-const renderLoading = ({ buttonElement, isLoading }) => {
-  if (isLoading) {
-    buttonElement.textContent = "Сохранение..."; // Показать текст "Сохранение..." при загрузке
-  } else {
-    buttonElement.textContent = "Сохранить"; // Показать текст "Сохранить" после завершения загрузки
-  }
+const renderLoading = ({ buttonElement, loadingText }) => {
+  buttonElement.textContent = loadingText; // Устанавливаем текст кнопки в зависимости от состояния загрузки
 };
 
 // Функция для открытия попапа редактирования профиля и установки значений полей формы
@@ -71,7 +70,7 @@ function handleProfileFormSubmit(evt) {
   const submitButton = profileForm.querySelector(
     validationConfig.submitButtonSelector
   ); // Находим кнопку отправки формы
-  renderLoading({ buttonElement: submitButton, isLoading: true }); // Показываем состояние загрузки
+  renderLoading({ buttonElement: submitButton, loadingText: "Сохранение..." }); // Показываем состояние загрузки
 
   const newName = nameInput.value; // Получаем новое имя
   const newAbout = jobInput.value; // Получаем новое описание
@@ -84,7 +83,7 @@ function handleProfileFormSubmit(evt) {
     })
     .catch((err) => console.log(err)) // Ловим ошибки
     .finally(() => {
-      renderLoading({ buttonElement: submitButton, isLoading: false }); // Возвращаем состояние кнопки после завершения загрузки
+      renderLoading({ buttonElement: submitButton, loadingText: "Сохранить" }); // Возвращаем состояние кнопки после завершения загрузки
     });
 }
 
@@ -95,7 +94,7 @@ function handleAddCardFormSubmit(evt) {
   const submitButton = addCardForm.querySelector(
     validationConfig.submitButtonSelector
   ); // Находим кнопку отправки формы
-  renderLoading({ buttonElement: submitButton, isLoading: true }); // Показываем состояние загрузки
+  renderLoading({ buttonElement: submitButton, loadingText: "Создание..." }); // Показываем состояние загрузки
 
   const cardData = {
     name: cardNameInput.value, // Получаем название карточки
@@ -111,8 +110,8 @@ function handleAddCardFormSubmit(evt) {
           handleImageClick,
           handleLikeClick,
           handleDeleteClick,
-          userId // Передаем userId в createCard
-        )
+          userId
+        ) // Передаем необходимые обработчики в createCard
       ); // Добавляем новую карточку в начало списка карточек
       closeModal(addCardPopup); // Закрываем попап добавления карточки
       addCardForm.reset(); // Очищаем поля формы
@@ -120,20 +119,36 @@ function handleAddCardFormSubmit(evt) {
     })
     .catch((err) => console.log(err)) // Ловим ошибки
     .finally(() => {
-      renderLoading({ buttonElement: submitButton, isLoading: false }); // Возвращаем состояние кнопки после завершения загрузки
+      renderLoading({ buttonElement: submitButton, loadingText: "Создать" }); // Возвращаем состояние кнопки после завершения загрузки
     });
 }
 
 // Функция для открытия попапа просмотра изображения карточки
 function handleImageClick(data) {
-  const popupImage = viewImagePopup.querySelector(".popup__image"); // Изображение в попапе
-  const popupCaption = viewImagePopup.querySelector(".popup__caption"); // Подпись в попапе
-
   popupImage.src = data.link; // Устанавливаем источник изображения
   popupImage.alt = data.name; // Устанавливаем альтернативный текст
   popupCaption.textContent = data.name; // Устанавливаем подпись изображения
 
   openModal(viewImagePopup); // Открываем попап просмотра изображения
+}
+
+// Обработчик открытия попапа подтверждения удаления
+function handleDeleteClick(evt, cardId, cardElement) {
+  openModal(confirmPopup); // Открываем попап подтверждения удаления
+
+  confirmButton.onclick = () => {
+    renderLoading({ buttonElement: confirmButton, loadingText: "Удаление..." }); // Показываем состояние загрузки
+
+    deleteCard(cardId) // Отправляем запрос на удаление карточки
+      .then(() => {
+        cardElement.remove(); // Удаляем карточку из DOM
+        closeModal(confirmPopup); // Закрываем попап подтверждения удаления
+      })
+      .catch((err) => console.log(err)) // Ловим ошибки
+      .finally(() => {
+        renderLoading({ buttonElement: confirmButton, loadingText: "Да" }); // Возвращаем состояние кнопки после завершения загрузки
+      });
+  };
 }
 
 // Функция для создания элемента карточки
@@ -143,15 +158,15 @@ function createCardElement(cardData, userId) {
     handleImageClick,
     handleLikeClick,
     handleDeleteClick,
-    userId // Передаем userId в createCard
-  );
+    userId
+  ); // Передаем необходимые обработчики
 }
 
 // Функция для рендеринга всех карточек
 function renderCards(cards, userId) {
-  cards.forEach(
-    (cardData) => cardList.appendChild(createCardElement(cardData, userId)) // Добавляем каждую карточку в контейнер
-  );
+  cards.forEach((cardData) =>
+    cardList.appendChild(createCardElement(cardData, userId))
+  ); // Добавляем каждую карточку в контейнер
 }
 
 // Функция для рендеринга информации о пользователе
@@ -175,7 +190,7 @@ function handleAvatarFormSubmit(evt) {
   const submitButton = avatarForm.querySelector(
     validationConfig.submitButtonSelector
   ); // Находим кнопку отправки формы
-  renderLoading({ buttonElement: submitButton, isLoading: true }); // Показываем состояние загрузки```javascript
+  renderLoading({ buttonElement: submitButton, loadingText: "Сохранение..." }); // Показываем состояние загрузки
   const newAvatar = avatarInput.value; // Получаем новый URL аватара
 
   updateAvatar(newAvatar) // Отправляем запрос на обновление аватара
@@ -185,7 +200,7 @@ function handleAvatarFormSubmit(evt) {
     })
     .catch((err) => console.log(err)) // Ловим ошибки
     .finally(() => {
-      renderLoading({ buttonElement: submitButton, isLoading: false }); // Возвращаем состояние кнопки после завершения загрузки
+      renderLoading({ buttonElement: submitButton, loadingText: "Сохранить" }); // Возвращаем состояние кнопки после завершения загрузки
     });
 }
 
@@ -227,4 +242,5 @@ editAvatarButton.addEventListener("click", handleEditAvatarClick); // Откры
 avatarCloseButton.addEventListener("click", () => closeModal(avatarPopup)); // Закрытие попапа редактирования аватара
 avatarForm.addEventListener("submit", handleAvatarFormSubmit); // Обработка отправки формы редактирования аватара
 
-enableValidation(validationConfig); // Включаем валидацию форм
+// Включаем валидацию для всех форм на странице
+enableValidation(validationConfig);
